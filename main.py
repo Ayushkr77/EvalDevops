@@ -15,9 +15,9 @@ topic_path = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 
 @app.route("/", methods=["GET"])
 def ingest_weather():
-    # Public weather API (no API key needed)
+    # Example weather API (no auth needed)
     url = "https://api.open-meteo.com/v1/forecast?latitude=28.61&longitude=77.20&current_weather=true"
-    response = requests.get(url, timeout=10)
+    response = requests.get(url)
     data = response.json()
 
     message = {
@@ -33,14 +33,4 @@ def ingest_weather():
         json.dumps(message).encode("utf-8")
     )
 
-    return jsonify({
-        "status": "published",
-        "message": message
-    })
-
-
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8080))
-    )
+    return jsonify({"status": "published", "data": message})
